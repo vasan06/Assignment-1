@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Secure File Workspace{% endblock %}
+
+{% block content %}
+<section class="auth-grid">
+  <div class="auth-panel">
+    <p class="eyebrow">Welcome back</p>
+    <h1>Access your protected files</h1>
+    <p class="muted">Sign in to upload, organize, search, download, and remove files from your private workspace.</p>
+    <form class="form-stack" method="post" action="{{ url_for('login') }}">
+      <label>
+        <span>Email address</span>
+        <input type="email" name="email" autocomplete="email" required>
+      </label>
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+      <button class="button full" type="submit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17a1 1 0 0 1-.7-1.71L12.58 12 9.3 8.71a1 1 0 0 1 1.4-1.42l5 5a1 1 0 0 1 0 1.42l-5 5A1 1 0 0 1 10 17Z"/><path d="M4 13a1 1 0 1 1 0-2h10a1 1 0 1 1 0 2H4Zm15 8h-4a1 1 0 1 1 0-2h4V5h-4a1 1 0 1 1 0-2h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2Z"/></svg>
+        Login
+      </button>
+    </form>
+    <p class="switch-copy">Need an account? <a href="{{ url_for('signup') }}">Create one</a></p>
+  </div>
+  <aside class="feature-panel" aria-label="Workspace features">
+    <div class="feature-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5.5v6.3c0 4.87 3.4 9.42 8 10.2 4.6-.78 8-5.33 8-10.2V5.5L12 2Zm3.7 8.7-4.2 4.2a1 1 0 0 1-1.4 0l-1.8-1.8a1 1 0 1 1 1.4-1.4l1.1 1.09 3.5-3.49a1 1 0 1 1 1.4 1.4Z"/></svg>
+      <div>
+        <h2>Private by account</h2>
+        <p>Files are linked to the signed-in user and never listed for other accounts.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a1 1 0 0 1 1 1v8.58l2.29-2.29a1 1 0 1 1 1.42 1.42l-4 4a1 1 0 0 1-1.42 0l-4-4a1 1 0 1 1 1.42-1.42L11 12.58V4a1 1 0 0 1 1-1ZM5 17a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1a1 1 0 0 1 1-1Z"/></svg>
+      <div>
+        <h2>Fast downloads</h2>
+        <p>Download original filenames from a clean dashboard table.</p>
+      </div>
+    </div>
+  </aside>
+</section>
+{% endblock %}

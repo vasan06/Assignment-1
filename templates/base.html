@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}File Workspace{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="Secure File Workspace home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="img"><path d="M4 4.75A2.75 2.75 0 0 1 6.75 2h6.1c.73 0 1.43.29 1.94.8l4.4 4.4c.52.52.81 1.21.81 1.94v10.11A2.75 2.75 0 0 1 17.25 22H6.75A2.75 2.75 0 0 1 4 19.25V4.75Zm9 1V8.5c0 .28.22.5.5.5h2.75L13 5.75ZM8 13.5a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H8Zm0 4a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2H8Z"/></svg>
+      </span>
+      <span>File Workspace</span>
+    </a>
+    <nav class="nav-actions" aria-label="Main navigation">
+      <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle color theme" title="Toggle theme">
+        <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Zm0 4a1 1 0 0 0 1-1v-1a1 1 0 1 0-2 0v1a1 1 0 0 0 1 1Zm0-18a1 1 0 0 0 1-1V2a1 1 0 1 0-2 0v1a1 1 0 0 0 1 1Zm10 8a1 1 0 0 0-1-1h-1a1 1 0 1 0 0 2h1a1 1 0 0 0 1-1ZM4 12a1 1 0 0 0-1-1H2a1 1 0 1 0 0 2h1a1 1 0 0 0 1-1Zm14.36 7.78a1 1 0 0 0 1.42-1.42l-.71-.7a1 1 0 1 0-1.41 1.4l.7.72ZM6.34 6.34a1 1 0 0 0 0-1.41l-.7-.71a1 1 0 0 0-1.42 1.42l.71.7a1 1 0 0 0 1.41 0Zm12.73 0 .71-.7a1 1 0 1 0-1.42-1.42l-.7.71a1 1 0 0 0 1.4 1.41ZM5.64 19.78l.7-.71a1 1 0 0 0-1.41-1.41l-.71.7a1 1 0 1 0 1.42 1.42Z"/></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14.5a8.7 8.7 0 0 1-10.9-11 1 1 0 0 0-1.19-1.3A10.75 10.75 0 1 0 21.7 15.7a1 1 0 0 0-1.3-1.19Z"/></svg>
+      </button>
+      {% if current_user %}
+        <a class="text-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+        <form action="{{ url_for('logout') }}" method="post">
+          <button class="button secondary" type="submit">Sign out</button>
+        </form>
+      {% else %}
+        <a class="text-link" href="{{ url_for('login') }}">Login</a>
+        <a class="button" href="{{ url_for('signup') }}">Create account</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <section class="flash-stack" aria-live="polite">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </section>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

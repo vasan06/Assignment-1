@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account | Secure File Workspace{% endblock %}
+
+{% block content %}
+<section class="auth-grid">
+  <div class="auth-panel">
+    <p class="eyebrow">Create workspace</p>
+    <h1>Start managing files securely</h1>
+    <p class="muted">Use a valid email and a password with at least eight characters.</p>
+    <form class="form-stack" method="post" action="{{ url_for('signup') }}">
+      <label>
+        <span>Full name</span>
+        <input type="text" name="name" autocomplete="name" required>
+      </label>
+      <label>
+        <span>Email address</span>
+        <input type="email" name="email" autocomplete="email" required>
+      </label>
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" autocomplete="new-password" minlength="8" required>
+      </label>
+      <label>
+        <span>Confirm password</span>
+        <input type="password" name="confirm_password" autocomplete="new-password" minlength="8" required>
+      </label>
+      <button class="button full" type="submit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14a5 5 0 1 0-8 0 8 8 0 0 0-4 6 1 1 0 1 0 2 .17A6 6 0 0 1 16.85 19a1 1 0 0 0 1.9-.62A8 8 0 0 0 15 14Zm-4-1a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm8-6a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2h-2a1 1 0 1 1 0-2h2V8a1 1 0 0 1 1-1Z"/></svg>
+        Create account
+      </button>
+    </form>
+    <p class="switch-copy">Already registered? <a href="{{ url_for('login') }}">Login</a></p>
+  </div>
+  <aside class="feature-panel" aria-label="Account benefits">
+    <div class="metric-callout">
+      <span>16 MB</span>
+      <p>Per-upload protection limit for practical assessment use.</p>
+    </div>
+    <div class="feature-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4a2 2 0 0 1 2-2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4Zm9 0v3h3l-3-3ZM8 13a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H8Zm0 4a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2H8Z"/></svg>
+      <div>
+        <h2>Multiple file types</h2>
+        <p>Upload common documents, images, archives, spreadsheets, and text files.</p>
+      </div>
+    </div>
+  </aside>
+</section>
+{% endblock %}

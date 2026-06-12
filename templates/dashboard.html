@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Secure File Workspace{% endblock %}
+
+{% block content %}
+<section class="dashboard-head">
+  <div>
+    <p class="eyebrow">Dashboard</p>
+    <h1>{{ current_user.name }}'s file workspace</h1>
+    <p class="muted">Upload, search, download, and remove your private files from one focused screen.</p>
+  </div>
+  <div class="stat-row" aria-label="Workspace summary">
+    <div class="stat-card">
+      <span>{{ stats.file_count }}</span>
+      <p>Files</p>
+    </div>
+    <div class="stat-card">
+      <span>{{ stats.total_size }}</span>
+      <p>Storage used</p>
+    </div>
+    <div class="stat-card">
+      <span>{{ stats.latest_upload }}</span>
+      <p>Latest upload</p>
+    </div>
+  </div>
+</section>
+
+<section class="workspace-grid">
+  <form class="upload-panel" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" data-upload-form>
+    <div class="upload-zone" data-drop-zone>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a1 1 0 0 1 .7.29l4 4a1 1 0 1 1-1.4 1.42L13 6.41V15a1 1 0 1 1-2 0V6.41L8.7 8.71A1 1 0 0 1 7.3 7.29l4-4A1 1 0 0 1 12 3ZM5 14a1 1 0 0 1 1 1v3h12v-3a1 1 0 1 1 2 0v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a1 1 0 0 1 1-1Z"/></svg>
+      <h2>Drop files here</h2>
+      <p>or browse from your computer</p>
+      <input id="files" type="file" name="files" multiple data-file-input>
+      <label class="button secondary" for="files">Browse files</label>
+    </div>
+    <div class="selected-files" data-selected-files aria-live="polite"></div>
+    <p class="small-note">Allowed types: {{ allowed_extensions }}.</p>
+    <button class="button full" type="submit">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a1 1 0 0 1 .7.29l4 4a1 1 0 1 1-1.4 1.42L13 6.41V15a1 1 0 1 1-2 0V6.41L8.7 8.71A1 1 0 0 1 7.3 7.29l4-4A1 1 0 0 1 12 3ZM5 18a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1Z"/></svg>
+      Upload selected files
+    </button>
+  </form>
+
+  <section class="files-panel" aria-labelledby="files-heading">
+    <div class="files-toolbar">
+      <div>
+        <h2 id="files-heading">Your files</h2>
+        <p class="muted" data-result-count>{{ files|length }} file{% if files|length != 1 %}s{% endif %} shown</p>
+      </div>
+      <label class="search-box">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 4a6.5 6.5 0 0 1 5.15 10.46l4.44 4.45a1 1 0 0 1-1.42 1.41l-4.44-4.44A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg>
+        <span class="sr-only">Search files</span>
+        <input type="search" placeholder="Search files" data-file-search>
+      </label>
+    </div>
+
+    {% if files %}
+      <div class="file-list" data-file-list>
+        {% for file in files %}
+          <article class="file-row" data-file-row data-file-name="{{ file.original_name|lower }}">
+            <div class="file-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 4a2 2 0 0 1 2-2h6.5L19 7.5V20a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4Zm8 0v4h4l-4-4Z"/></svg>
+            </div>
+            <div class="file-main">
+              <h3>{{ file.original_name }}</h3>
+              <p>{{ file.size_label }} uploaded {{ file.uploaded_label }}</p>
+            </div>
+            <div class="file-actions">
+              <a class="icon-button" href="{{ url_for('download', file_id=file.id) }}" aria-label="Download {{ file.original_name }}" title="Download">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a1 1 0 0 1 1 1v8.58l2.29-2.29a1 1 0 1 1 1.42 1.42l-4 4a1 1 0 0 1-1.42 0l-4-4a1 1 0 1 1 1.42-1.42L11 12.58V4a1 1 0 0 1 1-1ZM5 17a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1a1 1 0 0 1 1-1Z"/></svg>
+              </a>
+              <form action="{{ url_for('delete_file', file_id=file.id) }}" method="post" data-delete-form>
+                <button class="icon-button danger" type="submit" aria-label="Delete {{ file.original_name }}" title="Delete">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3a1 1 0 0 0-1 1v1H5a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2h-3V4a1 1 0 0 0-1-1H9Zm1 2h4V4h-4v1Zm-3 5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v9a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3v-9Zm3 2a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-5a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-5a1 1 0 0 0-1-1Z"/></svg>
+                </button>
+              </form>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+      <p class="empty-state is-hidden" data-empty-search>No files match your search.</p>
+    {% else %}
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a3 3 0 0 1 3-3h4.2a3 3 0 0 1 2.4 1.2L15 5h2a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5Zm3-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-2.5a1 1 0 0 1-.8-.4L12 4.4a1 1 0 0 0-.8-.4H7Z"/></svg>
+        <h2>No files uploaded</h2>
+        <p>Choose files from the upload panel to populate your workspace.</p>
+      </div>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}
